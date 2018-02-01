@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-import os, cv2, random
+import os, cv2, random, h5py
 import numpy as np
 import pandas as pd
 
@@ -51,11 +51,11 @@ x_train, y_train = prep_data(train_images)
 x_test, y_test = prep_data(test_images)
 
 print(x_train.shape)
-print(y_train.shape)
+#print(y_train.shape)
 print(type(x_train))
 print(type(y_train))
 
-optimizer = RMSprop(1r=1e-4)
+optimizer = RMSprop(lr=1e-4)
 objective = 'binary_crossentropy'
 
 model = Sequential()
@@ -102,10 +102,10 @@ class LossHistory(Callback):
         self.losses.append(logs.get('loss'))
         self.val_losses.append(logs.get('val_loss'))
 
-early_stopping = EarlyStopping(monitor='val_loss', patience=3, verbose=1, model='auto')
+early_stopping = EarlyStopping(monitor='val_loss', patience=3, verbose=1, mode='auto')
 history = LossHistory()
 
 y_train = np.array(y_train)
 model.fit(x_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch, validation_split=0.2, verbose=0, shuffle=True, callbacks=[history, early_stopping])
 
-model.save(/data/python/cat_dog.h5)
+model.save('/data/python/cat_dog.h5')
